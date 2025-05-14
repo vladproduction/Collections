@@ -1,4 +1,4 @@
-package com.vladproduction.app02.list.arraylist.arraylistpractice;
+package com.vladproduction.app02.list.arraylist;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -8,7 +8,7 @@ import java.util.List;
  * Created by vladproduction on 24-Mar-24
  */
 
-public class MyPracticeArrayList_5_reverse_list {
+public class ArrayListPractice5_ReverseList {
     public static void main(String[] args) {
 
         System.out.println(" 10)========");
@@ -36,6 +36,6 @@ public class MyPracticeArrayList_5_reverse_list {
         for (int i = list.size()-1; i >= 0 ; i--) {
              reversed.add(list.get(i));
         }
-        System.out.println("Custom loop (end-beginning):\n" + reversed);
+        System.out.println("Custom loop (from end to beginning):\n" + reversed);
     }
 }

@@ -1,14 +1,10 @@
-package com.vladproduction.app02.list.arraylist.arraylistpractice;
+package com.vladproduction.app02.list.arraylist;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-/**
- * Created by vladproduction on 24-Mar-24
- */
-
-public class MyPracticeArrayList_2_merging_lists {
+public class ArrayListPractice2_MergingLists {
     public static void main(String[] args) {
 
         System.out.println(" 7)========");
@@ -22,14 +18,14 @@ public class MyPracticeArrayList_2_merging_lists {
             if(i % 2 != 0)
             list1.add(i);
         }
-        list1.stream().forEach(integer -> System.out.print(integer));
+        list1.forEach(i -> System.out.print(i + " "));
         System.out.println();
         List<Integer> list2 = new ArrayList<>();
         for (int i = 0; i < 5; i++) {
             if (i % 2 == 0)
                 list2.add(i);
         }
-        list2.stream().forEach(integer -> System.out.print(integer));
+        list2.forEach(i -> System.out.print(i + " "));
         System.out.println();
 
         List<Integer> mergeSortedLists = mergeSortedLists(list1, list2);
@@ -62,5 +58,43 @@ public class MyPracticeArrayList_2_merging_lists {
         mergedList.addAll(list2.subList(j, list2.size()));
 
         return mergedList;
+    }
+
+    /**
+     * Created by vladproduction on 24-Mar-24
+     */
+
+    public static class ArrayListPractice4_FindMinMax {
+        public static void main(String[] args) {
+
+            System.out.println(" 9)========");
+            /**Find the minimum and maximum elements:
+
+             Write code to find the minimum and maximum elements in the numbers list without sorting.
+             Iterate through the list and keep track of the current minimum and maximum values encountered.*/
+            List<Integer> list = new ArrayList<>();
+            list.add(5);
+            list.add(50);
+            list.add(-5);
+            list.add(2);
+            list.add(105);
+            find_Min_Max(list);
+        }
+
+        private static void find_Min_Max(List<Integer> list) {
+            int currentMin = list.get(0);
+            int currentMax = list.get(0);
+
+            for (Integer number : list) {
+                if(number < currentMin){
+                    currentMin = number;
+                }
+                if (number > currentMax){
+                    currentMax = number;
+                }
+            }
+            System.out.println("Min: " + currentMin);
+            System.out.println("Max: " + currentMax);
+        }
     }
 }

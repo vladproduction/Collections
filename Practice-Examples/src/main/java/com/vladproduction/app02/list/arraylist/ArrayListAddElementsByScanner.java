@@ -1,9 +1,9 @@
-package com.vladproduction.app02.list.arraylist.arraylistpractice2;
+package com.vladproduction.app02.list.arraylist;
 
 import java.util.ArrayList;
 import java.util.Scanner;
 
-public class ArrayListExample {
+public class ArrayListAddElementsByScanner {
   public static void main(String[] args) {
 
       ArrayList<String> list = new ArrayList<String>();

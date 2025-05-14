@@ -1,4 +1,4 @@
-package com.vladproduction.app02.list.arraylist.arraylistpractice;
+package com.vladproduction.app02.list.arraylist;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -9,7 +9,7 @@ import java.util.Set;
  * Created by vladproduction on 24-Mar-24
  */
 
-public class MyPracticeArrayList_3_remove_duplicates {
+public class ArrayListPractice3_RemoveDuplicates {
     public static void main(String[] args) {
 
         System.out.println(" 8)========");
@@ -38,10 +38,9 @@ public class MyPracticeArrayList_3_remove_duplicates {
         list.add(145);
         list.add(4);
         list.add(321);
+        System.out.println(list);
 
         List<Integer> removedDuplicate = removeDuplicate(list);
-
-        System.out.println(list);
         System.out.println(removedDuplicate);
     }
 

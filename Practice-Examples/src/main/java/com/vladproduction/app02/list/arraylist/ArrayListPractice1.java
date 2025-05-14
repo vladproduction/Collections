@@ -1,16 +1,13 @@
-package com.vladproduction.app02.list.arraylist.arraylistpractice;
+package com.vladproduction.app02.list.arraylist;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
-/**
- * Created by vladproduction on 23-Mar-24
- */
-
-public class MyPracticeArrayList_1 {
+public class ArrayListPractice1 {
     public static void main(String[] args) {
+
         System.out.println(" 1)========");
         /**1)Create an ArrayList and add elements:
 
@@ -71,7 +68,7 @@ public class MyPracticeArrayList_1 {
         System.out.println();
 
         System.out.println(" 6)========");
-         /**Iterate and modify elements:
+        /**Iterate and modify elements:
 
          Iterate through the numbers list and multiply each element by 2.
          Use a for loop or forEach loop with lambda to modify each element within the list.*/
@@ -96,12 +93,12 @@ public class MyPracticeArrayList_1 {
         listForLambda.add(2);
         listForLambda.add(4);
         listForLambda.add(6);
+        System.out.println("Before modification: ");
+        listForLambda.forEach(integer -> System.out.print(integer + " "));
         IntStream.range(0, listForLambda.size())
                 .forEach(i -> listForLambda.set(i, listForLambda.get(i) * 3));
         String modifiedByLambda = listForLambda.stream().map(String::valueOf).collect(Collectors.joining(" "));
-        System.out.println(modifiedByLambda); // 6 12 18
-
-
+        System.out.println("\nAfter modification: " + modifiedByLambda); // 6 12 18
 
     }
 }

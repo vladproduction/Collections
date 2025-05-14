@@ -1,4 +1,4 @@
-package com.vladproduction.app02.list.arraylist.arraylistpractice2;
+package com.vladproduction.app02.list.arraylist;
 
 import java.util.ArrayList;
 import java.util.List;
