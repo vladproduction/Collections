@@ -54,6 +54,47 @@ Each interface has multiple **concrete classes** optimized for specific needs:
 
 ---
 
+## 🌳 Collections Hierarchy
+
+Below is a high-level view of the Java Collections Framework hierarchy, showing the relationships between interfaces and their key implementations:
+
+```
+java.util.Collection (Interface)
+├── List (Interface)
+│   ├── ArrayList
+│   ├── LinkedList
+│   └── Vector
+│       └── Stack
+│
+├── Set (Interface)
+│   ├── HashSet
+│   │   └── LinkedHashSet
+│   └── TreeSet (implements NavigableSet)
+│
+├── Queue (Interface)
+│   ├── PriorityQueue
+│   └── LinkedList
+│
+└── Deque (Interface)
+    ├── ArrayDeque
+    └── LinkedList
+
+java.util.Map (Interface)
+├── HashMap
+│   └── LinkedHashMap
+├── TreeMap (implements NavigableMap)
+└── Hashtable
+    └── Properties
+```
+
+### 📝 Notes:
+- `Collection` is the root interface for all major collections except maps.
+- `Map` is a separate hierarchy and does not extend `Collection`.
+- Legacy classes like `Vector`, `Stack`, and `Hashtable` are synchronized but generally superseded by modern alternatives.
+- `NavigableSet` and `NavigableMap` offer useful navigation methods (`lower()`, `higher()`, etc.).
+
+---
+
 
 
 
