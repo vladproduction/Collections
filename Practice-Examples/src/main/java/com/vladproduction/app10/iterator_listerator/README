@@ -1,0 +1,9 @@
+Iterator in Java is an object used to cycle through arguments or elements present in a collection.
+It is derived from the technical term “iterating,” which means looping through.
+Generally, an iterator in Java is used to loop through any collection of objects.
+
+examples:
+-iterator;
+-ListIterator;
+-fail-fast sample;
+-fail-safe sample;

@@ -1,0 +1,13 @@
+A Map is an object that maps keys to values. A map cannot contain duplicate keys: Each key can map to at most one value.
+It models the mathematical function abstraction. The Map interface includes methods for
+basic operations
+(such as put, get, remove, containsKey, containsValue, size, and empty),
+bulk operations
+(such as putAll and clear),
+and collection views (such as keySet, entrySet, and values).
+
+The Java platform contains three general-purpose Map implementations:
+-HashMap;
+-TreeMap;
+-LinkedHashMap;
+Their behavior and performance are precisely analogous to HashSet, TreeSet, and LinkedHashSet.

@@ -1,0 +1,12 @@
+-LIFO (last-in-first-out);
+-extends class Vector with five operations that allow a Vector to be treated as a stack;
+    *push - put element in to the stack on top;
+    *pop - take and remove top element of the stack;
+    *peek - only take top element without removing it;
+    *empty - contains elements in stack or not
+    *searching item and discover how far it from top
+
+-pop, peek, search is synchronized methods;
+so when we are working with threads or in multithreading environment, any access to stack have to be synchronized;
+Vector is synchronized. If a thread-safe implementation is not needed, it is recommended to use ArrayList
+in place of Vector.

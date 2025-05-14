@@ -1,0 +1,2 @@
+-FIFO (first-in-first-out);
+-collection designed for holding elements prior to processing;

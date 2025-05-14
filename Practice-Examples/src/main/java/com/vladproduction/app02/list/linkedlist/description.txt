@@ -1,0 +1,8 @@
+-contain HeadNode; has previous always null
+-each of nodes contain references to next and previous node;
+-last node has always null;
+-can contain of vary objects in linked List (Integers, Cars, Persons, etc.);
+-can cost, because has references both sides;
+-have the option to addLast or addFirst;
+-add by index;
+-add (Object element) boolean;
