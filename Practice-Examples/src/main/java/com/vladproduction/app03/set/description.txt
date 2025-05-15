@@ -1,3 +1,0 @@
--no duplicates;
--no order guarantee;
--mathematical set abstraction;

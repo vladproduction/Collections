@@ -1,0 +1,37 @@
+A Set is a Collection that cannot contain duplicate elements.
+It models the mathematical set abstraction. The Set interface contains only methods inherited from Collection
+and adds the restriction that duplicate elements are prohibited.
+
+Set also adds a stronger contract on the behavior of the equals and hashCode operations, allowing Set instances
+to be compared meaningfully even if their implementation types differ. Two Set instances are equal if they contain
+the same elements.
+
+The Java platform contains three general-purpose Set implementations:
+-HashSet;
+-LinkedHashSet;
+-TreeSet;
+
+Set:
+    1) unique
+    2) no index access
+    3) has no order
+
+ HashSet:
+    1) unique - define as equals/hashCode
+
+ LinkedHashSet:
+    1) unique - define as equals/hashCode
+    3) has order
+
+ TreeSet:
+    1) unique - define as Comparator -1, 0 ,1
+    4) supports sorting (only for TreeSet)
+
+Set - interface
+ Here are next implementations:
+    1) HashSet
+    2) LinkedHashSet
+    3) TreeSet
+ Set set = new HashSet();
+ Set set = new LinkedHashSet();
+ Set set = new TreeSet()

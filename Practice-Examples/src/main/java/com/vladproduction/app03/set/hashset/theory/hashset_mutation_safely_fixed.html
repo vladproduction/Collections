@@ -1,0 +1,114 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>HashSet Mutation - Visualized and Safely Fixed</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            margin: 40px;
+            background: #f4f8fb;
+            color: #333;
+        }
+        h1, h2 {
+            color: #1a237e;
+        }
+        .bucket {
+            border: 1px solid #aaa;
+            border-radius: 6px;
+            padding: 10px;
+            margin-bottom: 10px;
+            background-color: #e3f2fd;
+        }
+        .bucket-title {
+            font-weight: bold;
+            color: #0d47a1;
+        }
+        .object-box {
+            display: inline-block;
+            padding: 6px 12px;
+            margin: 4px;
+            background-color: #bbdefb;
+            border: 1px solid #90caf9;
+            border-radius: 4px;
+        }
+        .error-box {
+            background-color: #ffcdd2;
+            border: 1px solid #ef9a9a;
+        }
+        .note {
+            background: #fff3cd;
+            border-left: 4px solid #ffecb5;
+            padding: 10px;
+            margin-top: 20px;
+        }
+        .code {
+            background: #f4f4f4;
+            border-left: 4px solid #0a4c76;
+            padding: 10px;
+            font-family: Consolas, monospace;
+            white-space: pre-wrap;
+        }
+    </style>
+</head>
+<body>
+
+<h1>HashSet Mutation and Safe Update</h1>
+
+<h2>🔁 Scenario: Mutation after insertion</h2>
+
+<p><strong>Initial state:</strong></p>
+<div class="bucket">
+    <div class="bucket-title">Bucket 3</div>
+    <div class="object-box">Person("John", 20) → p1</div>
+</div>
+
+<p>Now we do:</p>
+<div class="code">p1.setName("Johnny");</div>
+
+<p><strong>What HashSet thinks:</strong></p>
+<div class="bucket">
+    <div class="bucket-title">Bucket 3</div>
+    <div class="object-box error-box">p1 (hash mismatch)</div>
+</div>
+
+<p><strong>What new hashCode() implies:</strong></p>
+<div class="bucket">
+    <div class="bucket-title">Bucket 7</div>
+    <div class="object-box">p1 (not found in Set)</div>
+</div>
+
+<div class="note">
+    <strong>Problem:</strong> <code>HashSet.contains(p1)</code> returns <code>false</code> because it searches in the wrong bucket.
+</div>
+
+<h2>✅ Safe Approach: Remove → Mutate → Re-add</h2>
+
+<p>Update object safely like this:</p>
+<div class="code">
+if (persons.contains(p1)) {
+    persons.remove(p1);       // step 1: remove from old bucket
+    p1.setName("Johnny");     // step 2: mutate fields
+    persons.add(p1);          // step 3: rehash and insert again
+}
+</div>
+
+<p><strong>Final state:</strong></p>
+<div class="bucket">
+    <div class="bucket-title">Bucket 7 (after re-add)</div>
+    <div class="object-box">Person("Johnny", 20) → p1</div>
+</div>
+
+<div class="note">
+    ✅ Now <code>persons.contains(p1)</code> works properly again, and <code>HashSet</code> integrity is maintained.
+</div>
+
+<h2>Best Practices</h2>
+<ul>
+    <li>Keep fields used in <code>equals()</code> and <code>hashCode()</code> immutable while object is in the Set.</li>
+    <li>If mutation is necessary, always <strong>remove → mutate → re-add</strong>.</li>
+</ul>
+
+</body>
+</html>
