@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Collections.synchronizedMap() in Java - Summary</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f4f6f8;
+            color: #333;
+            line-height: 1.6;
+            padding: 20px;
+        }
+        h1, h2, h3 {
+            color: #0a6ebd;
+        }
+        code {
+            background: #eee;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-size: 90%;
+        }
+        pre {
+            background-color: #f0f0f0;
+            padding: 12px;
+            border-radius: 6px;
+            overflow-x: auto;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        table, th, td {
+            border: 1px solid #bbb;
+        }
+        th, td {
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background-color: #e0e0e0;
+        }
+        .note {
+            background: #fff3cd;
+            border-left: 6px solid #ffecb5;
+            padding: 10px;
+            margin: 10px 0;
+        }
+    </style>
+</head>
+<body>
+<h1>Collections.synchronizedMap() in Java</h1>
+
+<h2>🔍 What is it?</h2>
+<p><code>Collections.synchronizedMap()</code> is a wrapper that makes a regular <code>Map</code> (like <code>HashMap</code>) thread-safe by synchronizing access to it.</p>
+
+<h2>✅ Example Usage</h2>
+<pre><code>Map&lt;String, String&gt; syncMap = Collections.synchronizedMap(new HashMap&lt;&gt;());
+syncMap.put("A", "Apple");
+syncMap.put("B", "Banana");</code></pre>
+
+<h2>⚠️ Important</h2>
+<div class="note">
+    When iterating over a synchronized map, you <strong>must manually synchronize</strong> the map:
+</div>
+<pre><code>synchronized(syncMap) {
+    for (Map.Entry&lt;String, String&gt; entry : syncMap.entrySet()) {
+        System.out.println(entry.getKey() + " => " + entry.getValue());
+    }
+}</code></pre>
+
+<h2>📊 Comparison Table</h2>
+<table>
+    <thead>
+    <tr>
+        <th>Feature</th>
+        <th>SynchronizedMap</th>
+        <th>ConcurrentHashMap</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+        <td>Thread Safety</td>
+        <td>Yes (whole map synchronized)</td>
+        <td>Yes (bucket-level locks)</td>
+    </tr>
+    <tr>
+        <td>Iteration Thread-Safe</td>
+        <td>No (requires manual sync)</td>
+        <td>Yes (weakly consistent)</td>
+    </tr>
+    <tr>
+        <td>Performance</td>
+        <td>Lower (coarse lock)</td>
+        <td>Higher (fine-grained locks)</td>
+    </tr>
+    <tr>
+        <td>Null Keys/Values</td>
+        <td>Depends on underlying map</td>
+        <td>Not allowed</td>
+    </tr>
+    </tbody>
+</table>
+
+<h2>🧠 Interview Tips</h2>
+<ul>
+    <li>Use <code>Collections.synchronizedMap()</code> to quickly retrofit thread safety to existing code.</li>
+    <li>Always wrap iteration in <code>synchronized</code> block.</li>
+    <li>For high-performance needs, use <code>ConcurrentHashMap</code>.</li>
+    <li>Wrap around <code>HashMap</code>, <code>TreeMap</code>, or others as needed.</li>
+</ul>
+
+<h2>📘 When to Use</h2>
+<ul>
+    <li>Good for small-scale applications</li>
+    <li>Quick fixes in legacy code</li>
+    <li>Not suitable for high-concurrency or low-latency systems</li>
+</ul>
+</body>
+</html>

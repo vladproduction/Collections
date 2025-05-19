@@ -21,7 +21,7 @@ public class Demo_EqualsHashCode {
         set.add(person1);
         set.add(person2);
 
-        /*
+        /**
         equals and hashCode is not overridden yet:
         comparing objects is going by memory location
         */

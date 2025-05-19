@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Java TreeMap Summary</title>
+    <style>
+        body { font-family: Arial, sans-serif; max-width: 900px; margin: auto; padding: 20px; }
+        h1, h2 { color: #2c3e50; }
+        pre { background-color: #f4f4f4; padding: 15px; border-radius: 5px; overflow-x: auto; }
+        table { border-collapse: collapse; width: 100%; margin: 20px 0; }
+        th, td { border: 1px solid #ddd; padding: 10px; text-align: left; }
+        th { background-color: #3498db; color: white; }
+        ul { line-height: 1.6; }
+    </style>
+</head>
+<body>
+<h1>Java TreeMap Summary</h1>
+
+<h2>What is TreeMap?</h2>
+<p>
+    TreeMap is a <code>Map</code> implementation that stores keys in a sorted order using a balanced Red-Black tree structure.
+    It provides <code>O(log n)</code> time complexity for insertions, deletions, and lookups.
+</p>
+
+<h2>Key Characteristics</h2>
+<table>
+    <tr><th>Property</th><th>Details</th></tr>
+    <tr><td>Ordering</td><td>Sorted by natural order or custom Comparator</td></tr>
+    <tr><td>Null Keys</td><td>Not allowed</td></tr>
+    <tr><td>Null Values</td><td>Allowed</td></tr>
+    <tr><td>Performance</td><td>O(log n) for basic operations</td></tr>
+    <tr><td>Interface</td><td>Implements NavigableMap</td></tr>
+</table>
+
+<h2>Common Methods</h2>
+<ul>
+    <li><code>put(K key, V value)</code> - Insert or update</li>
+    <li><code>get(Object key)</code> - Retrieve value</li>
+    <li><code>remove(Object key)</code> - Remove entry</li>
+    <li><code>firstKey(), lastKey()</code> - Get smallest/largest key</li>
+    <li><code>floorKey(K key), ceilingKey(K key)</code> - Closest keys</li>
+    <li><code>pollFirstEntry(), pollLastEntry()</code> - Remove and return first/last entry</li>
+</ul>
+
+<h2>Iteration</h2>
+<pre>
+for (Map.Entry&lt;K, V&gt; entry : treeMap.entrySet()) {
+  System.out.println(entry.getKey() + " => " + entry.getValue());
+}
+</pre>
+
+<h2>Use Cases</h2>
+<ul>
+    <li>Range queries and nearest neighbor lookups</li>
+    <li>Implementing calendar booking systems</li>
+    <li>Sorting by keys automatically</li>
+</ul>
+
+<h2>Classic Problems</h2>
+<ul>
+    <li>Find K Closest Numbers to Target</li>
+    <li>My Calendar I (non-overlapping intervals)</li>
+    <li>Top K Frequent Elements</li>
+</ul>
+
+</body>
+</html>

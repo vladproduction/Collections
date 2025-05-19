@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Java Map Learning & Interview Prep Guide</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            margin: 20px;
+            background-color: #fafafa;
+        }
+        h1 {
+            text-align: center;
+            color: #2c3e50;
+        }
+        h2 {
+            color: #34495e;
+            margin-top: 30px;
+            border-bottom: 2px solid #ddd;
+            padding-bottom: 5px;
+        }
+        h3 {
+            color: #16a085;
+            margin-top: 20px;
+        }
+        ul {
+            list-style-type: disc;
+            margin-left: 20px;
+        }
+        Strong {
+            font-weight: bold;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: center;
+        }
+        th {
+            background-color: #ecf0f1;
+        }
+        pre {
+            background: #f4f4f4;
+            padding: 10px;
+            border-radius: 6px;
+            overflow-x: auto;
+            margin-top: 10px;
+        }
+        .section {
+            margin-bottom: 30px;
+        }
+        .practice {
+            margin-left: 20px;
+        }
+    </style>
+</head>
+<body>
+
+<h1>Java Map Learning &amp; Interview Prep Guide</h1>
+
+<!-- 1. Fundamentals of Map Interface -->
+<div class="section">
+    <h2>1. Fundamentals of Map Interface</h2>
+    <p><strong>Goal:</strong> Understand the core Map interface and its primary operations.</p>
+    <h3>✅ Learn:</h3>
+    <ul>
+        <li><strong>Map&lt;K, V&gt; definition</strong></li>
+        <li><strong>Common methods:</strong>
+            <ul>
+                <li><code>put(K key, V value)</code></li>
+                <li><code>get(Object key)</code></li>
+                <li><code>remove(Object key)</code></li>
+                <li><code>containsKey()</code> &amp; <code>containsValue()</code></li>
+                <li><code>keySet()</code>, <code>values()</code>, <code>entrySet()</code></li>
+            </ul>
+        </li>
+        <li><strong>Map iteration</strong> techniques:
+            <ul>
+                <li>Using for-each loop over <code>entrySet()</></li>
+                <li>Using iterator</li>
+                <li>Using Java Streams</li>
+            </ul>
+        </li>
+    </ul>
+
+    <h3>📌 Practice:</h3>
+    <div class="practice">
+        <ul>
+            <li>Build frequency count of characters or words</li>
+            <li>Create a simple in-memory key-value store</li>
+        </ul>
+    </div>
+</div>
+
+<!-- 2. Core Implementations of Map -->
+<div class="section">
+    <h2>2. Core Implementations of Map</h2>
+    <table>
+        <tr>
+            <th>Map Type</th><th>Ordered?</th><th>Synchronized?</th><th>Allows Nulls?</th><th>Key Traits</th>
+        </tr>
+        <tr>
+            <td>HashMap</td><td>❌</td><td>❌</td><td>✅ (1 null key)</td><td>Fast lookup, no order guarantee</td>
+        </tr>
+        <tr>
+            <td>LinkedHashMap</td><td>✅ (insertion)</td><td>❌</td><td>✅</td><td>Preserves insertion order</td>
+        </tr>
+        <tr>
+            <td>TreeMap</td><td>✅ (sorted)</td><td>❌</td><td>❌ (null keys)</td><td>Sorted by key (natural/custom)</td>
+        </tr>
+        <tr>
+            <td>Hashtable</td><td>❌</td><td>✅</td><td>❌</td><td>Legacy synchronized map</td>
+        </tr>
+        <tr>
+            <td>ConcurrentHashMap</td><td>❌</td><td>✅</td><td>❌</td><td>High-performance thread-safe</td>
+        </tr>
+    </table>
+
+    <h3>✅ Learn for each:</h3>
+    <ul>
+        <li><strong>Internal structure:</strong>
+            <ul>
+                <li><em>HashMap</em>: Uses an array of buckets; nodes stored as linked lists or trees for efficiency.</li>
+                <li><em>LinkedHashMap</em>: Extends HashMap, maintains a doubly-linked list to preserve insertion order.</li>
+                <li><em>TreeMap</em>: Implements a Red-Black Tree for sorted key ordering.</li>
+                <li><em>Hashtable</em>: Uses an array of buckets with synchronized access; similar to HashMap but synchronized.</li>
+                <li><em>ConcurrentHashMap</em>: Segment-based locking (Java 7) or bucket locking (Java 8+), highly concurrent.</li>
+            </ul>
+        </li>
+        <li><strong>Performance:</strong>
+            <ul>
+                <li><em>HashMap</em>: O(1) for get/put in ideal conditions.</li>
+                <li><em>TreeMap</em>: O(log n)</li>
+                <li><em>ConcurrentHashMap</em>: Near O(1) for most operations under high concurrency.</li>
+            </ul>
+        </li>
+        <li><strong>Null key/value rules:</strong>
+            <ul>
+                <li><em>HashMap</em>: Allows one null key and multiple null values.</li>
+                <li><em>TreeMap</em>: Does not allow null keys (throws NullPointerException), allows null values.</li>
+                <li><em>Hashtable</em>: Neither null keys nor null values allowed.</li>
+                <li><em>ConcurrentHashMap</em>: No null keys or null values.</li>
+            </ul>
+        </li>
+        <li><strong>Real-world use cases:</strong></li>
+        <ul>
+            <li>HashMap: Caching, lookup tables, in-memory data storage.</li>
+            <li>TreeMap: Range queries, sorted data views.</li>
+            <li>LinkedHashMap: LRU caches, maintaining access order.</li>
+            <li>Hashtable: Legacy systems requiring synchronization.</li>
+            <li>ConcurrentHashMap: High-concurrency applications, real-time systems.</li>
+        </ul>
+    </ul>
+
+    <h2>3. Iteration Techniques</h2>
+    <p>Goal: Be fluent in traversing maps.</p>
+    <h3>✅ Know:</h3>
+    <ul>
+        <li>Using <code>entrySet()</code> with for-each loop:
+            <pre><code>for (Map.Entry&lt;K, V&gt; entry : map.entrySet()) {
+    // access entry.getKey(), entry.getValue()
+  }</code></pre>
+        </li>
+        <li>Using <code>keySet()</code> and <code>values()</code>:
+            <pre><code>for (K key : map.keySet()) {
+    V value = map.get(key);
+  }
+for (V value : map.values()) {
+    // process values
+  }</code></pre>
+        </li>
+        <li>Java 8+ methods:
+            <ul>
+                <li><code>forEach()</code>:
+                    <pre><code>map.forEach((k, v) -&gt; System.out.println(k + " = " + v));</code></pre>
+                </li>
+                <li><code>computeIfAbsent()</code>: Lazily initialize if absent.</li>
+                <li><code>merge()</code>: Combine existing values with new ones.</li>
+            </ul>
+        </li>
+    </ul>
+    <h3>📌 Practice:</h3>
+    <div class="practice">
+        <ul>
+            <li>Remove entries during iteration safely (use iterator's remove method)</li>
+            <li>Use streams to filter or sort maps</li>
+        </ul>
+    </div>
+
+    <h2>4. Common Map-Based Interview Problems</h2>
+    <p>Classic Problems include:</p>
+    <ul>
+        <li>LRU Cache</li>
+        <li>Word frequency counter</li>
+        <li>Two Sum using Map</li>
+        <li>Group Anagrams</li>
+        <li>Top K frequent elements</li>
+        <li>Substring with Concatenation of All Words</li>
+        <li>First non-repeating character</li>
+    </ul>
+    <p>We will often solve these with <em>HashMap</em>, <em>LinkedHashMap</em>, and <em>TreeMap</em>.</p>
+
+    <h2>5. LinkedHashMap for LRU Caching</h2>
+    <h3>✅ Learn:</h3>
+    <ul>
+        <li><strong>How <code>removeEldestEntry()</code> works:</strong>
+            Override this method to automatically remove the oldest entry when a certain size or condition is met.
+            For example, to implement an LRU cache, return true when the size exceeds the maximum capacity.
+        </li>
+        <li><strong>Create a custom LRU cache:</strong>
+            Extend <code>LinkedHashMap</code> and override <code>removeEldestEntry()</code>. Typical pattern:
+            <pre><code>public class LRUCache&lt;K, V&gt; extends LinkedHashMap&lt;K, V&gt; {
+    private final int maxSize;
+
+    public LRUCache(int capacity) {
+        super(capacity + 1, 1.0f, true); // accessOrder = true
+        this.maxSize = capacity;
+    }
+
+    @Override
+    protected boolean removeEldestEntry(Map.Entry&lt;K, V&gt; eldest) {
+        return size() > maxSize;
+    }
+}</code></pre>
+        </li>
+        <li><strong>Override eviction policy:</strong>
+            Customize logic in <code>removeEldestEntry()</code> for size-based eviction, time-based, or other criteria.
+        </li>
+    </ul>
+
+    <h3>📌 Build:</h3>
+    <div class="practice">
+        <ul>
+            <li><strong>Example:</strong> Implement a simple LRUCache class using <code>LinkedHashMap</code>.</li>
+            <li>Use the custom cache for caching data with automatic eviction.</li>
+        </ul>
+    </div>
+
+    <h2>6. TreeMap and NavigableMap</h2>
+    <h3>✅ Learn:</h3>
+    <ul>
+        <li><strong>Key methods:</strong> <code>ceilingKey(), floorKey(), higherKey(), lowerKey()</code></li>
+        <li><strong>Use cases:</strong>
+            <ul>
+                <li>Interval-based problems, e.g., MyCalendar, stock span.</li>
+                <li>Finding closest elements in sorted data.</li>
+            </ul>
+        </li>
+    </ul>
+    <h3>📌 Practice:</h3>
+    <div class="practice">
+        <ul>
+            <li>Build a simple stock price tracker with TreeMap.</li>
+            <li>Implement a "find next closest element" function.</li>
+        </ul>
+    </div>
+
+    <h2>7. Thread-safe Maps</h2>
+    <h3>✅ Cover:</h3>
+    <ul>
+        <li><strong>ConcurrentHashMap internals:</strong>
+            Uses segment-based locking (Java 7) or bucket locking (Java 8+), allowing high concurrency.
+        </li>
+        <li><strong>Atomic operations:</strong>
+            <ul>
+                <li>putIfAbsent()</li>
+                <li>compute()</li>
+                <li>computeIfAbsent()</li>
+            </ul>
+        </li>
+    </ul>
+    <h3>💡 Build:</h3>
+    <div class="practice">
+        <ul>
+            <li>Create a concurrent counter using <code>ConcurrentHashMap</code>.</li>
+            <li>Implement a rate limiter with timestamp buckets.</li>
+        </ul>
+    </div>
+
+    <h2>8. Custom Map Implementations</h2>
+    <h3>✅ Implement from scratch:</h3>
+    <ul>
+        <li>Design your own HashMap using arrays + linked lists.</li>
+        <li>Support <code>put()</code>, <code>get()</code>, <code>remove()</code>, load factor, and resizing.</li>
+    </ul>
+    <h3>📌 Useful for:</h3>
+    <ul>
+        <li>Demonstrating low-level understanding in interviews.</li>
+    </ul>
+
+    <h2>9. Advanced Map Patterns</h2>
+    <h3>✅ Learn:</h3>
+    <ul>
+        <li>Bi-directional maps (e.g., Guava’s <code>BiMap</code>)</li>
+        <li>MultiMaps (maps of collections)</li>
+        <li>Specialized maps:
+            <ul>
+                <li><code>EnumMap</code>: for enum keys</li>
+                <li><code>IdentityHashMap</code>: compares keys using reference equality</li>
+                <li><code>WeakHashMap</code>: allows keys to be garbage collected</li>
+            </ul>
+        </li>
+        <li><strong>ThreadLocal with map-backed store:</strong> Use thread-local maps for thread-specific data.</li>
+    </ul>
+
+    <h2>10. Real-world Design Scenarios</h2>
+    <p>Various systems and features rely heavily on Maps for efficient data management and quick access. Here are some common examples:</p>
+    <ul>
+        <li><strong>Caching Systems:</strong>
+            Implement in-memory caches like Redis or Guava Cache to store frequently accessed data and reduce latency.
+        </li>
+        <li><strong>Token Buckets:</strong>
+            Use Maps to implement rate limiting mechanisms by tracking tokens or request counts per user/IP.
+        </li>
+        <li><strong>In-memory Database Indexes:</strong>
+            Use Maps for indexing data for quick retrieval, e.g., indexing columns for fast lookup.
+        </li>
+        <li><strong>User Session Stores:</strong>
+            Store active user sessions with session IDs as keys for quick access and expiration management.
+        </li>
+        <li><strong>Autocomplete Suggestions Map:</strong>
+            Use prefix-based maps (trie or prefix maps) backed by HashMaps for fast autocomplete suggestions.
+        </li>
+        <li><strong>Event Deduplication:</strong>
+            Use Maps to remember processed event IDs to prevent duplicate processing and ensure idempotency.
+        </li>
+    </ul>
+
+    <p>In real-world applications, choosing the right Map implementation and designing for thread safety, performance, and appropriate expiration strategies are crucial for building scalable, efficient systems.</p>
+</div>
+
+</body>
+</html>

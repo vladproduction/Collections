@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Java Iterator Review</title>
+    <style>
+        body { font-family: Arial, sans-serif; line-height: 1.6; margin: 20px; }
+        code { background: #f4f4f4; padding: 2px 5px; border-radius: 3px; }
+        pre { background: #f4f4f4; padding: 10px; border-left: 4px solid #007acc; overflow-x: auto; }
+        h1, h2, h3 { color: #007acc; }
+        .section { margin-bottom: 30px; }
+    </style>
+</head>
+<body>
+
+<h1>Java Iterator Interface - Review</h1>
+
+<div class="section">
+    <h2>📘 Overview</h2>
+    <p>The <code>Iterator&lt;E&gt;</code> interface is used to traverse elements in a collection sequentially.</p>
+    <p>Commonly used with collections such as <code>List</code>, <code>Set</code>, and <code>Queue</code>.</p>
+    <p>It provides the following methods:</p>
+    <pre><code>boolean hasNext();
+E next();
+void remove(); // optional</code></pre>
+</div>
+
+<div class="section">
+    <h2>✅ Basic Usage Example</h2>
+    <pre><code>List&lt;String&gt; fruits = new ArrayList&lt;&gt;();
+fruits.add("apple");
+fruits.add("banana");
+fruits.add("cherry");
+
+Iterator&lt;String&gt; iterator = fruits.iterator();
+while (iterator.hasNext()) {
+    String fruit = iterator.next();
+    System.out.println(fruit);
+}</code></pre>
+</div>
+
+<div class="section">
+    <h2>🗑️ Removing Elements Safely</h2>
+    <p>Use <code>iterator.remove()</code> only after calling <code>next()</code>.</p>
+    <pre><code>Iterator&lt;String&gt; it = fruits.iterator();
+while (it.hasNext()) {
+    if (it.next().startsWith("b")) {
+        it.remove(); // removes "banana"
+    }
+}</code></pre>
+    <p><strong>Note:</strong> Calling <code>remove()</code> twice in a row without calling <code>next()</code> will throw an <code>IllegalStateException</code>.</p>
+</div>
+
+<div class="section">
+    <h2>⚠️ Common Pitfalls</h2>
+    <ul>
+        <li><strong>Modifying collection directly during iteration</strong> → <code>ConcurrentModificationException</code></li>
+        <li>Calling <code>remove()</code> before <code>next()</code></li>
+        <li>Not resetting iterator when reusing</li>
+    </ul>
+</div>
+
+<div class="section">
+    <h2>🛡️ Fail-Fast vs Fail-Safe</h2>
+    <h3>🚫 Fail-Fast Iterators</h3>
+    <ul>
+        <li>Most <code>java.util</code> collection iterators are fail-fast.</li>
+        <li>If the collection is structurally modified (except via the iterator), it throws <code>ConcurrentModificationException</code>.</li>
+    </ul>
+    <pre><code>List&lt;String&gt; list = new ArrayList&lt;&gt;();
+list.add("A");
+list.add("B");
+
+for (String s : list) {
+    list.remove(s); // ConcurrentModificationException
+}</code></pre>
+
+    <h3>✅ Fail-Safe Iterators</h3>
+    <ul>
+        <li>Used in concurrent collections like <code>CopyOnWriteArrayList</code>, <code>ConcurrentHashMap</code>.</li>
+        <li>They iterate over a copy; changes do not affect the iteration.</li>
+    </ul>
+    <pre><code>CopyOnWriteArrayList&lt;String&gt; list = new CopyOnWriteArrayList&lt;&gt;();
+list.add("A");
+list.add("B");
+
+for (String s : list) {
+    list.remove(s); // Safe, no exception
+}</code></pre>
+</div>
+
+<div class="section">
+    <h2>🧩 Custom Iterator Example</h2>
+    <p>Example with a custom class implementing <code>Iterator</code> via <code>Iterable</code>:</p>
+    <pre><code>public class MyCollection implements Iterable&lt;String&gt; {
+    private final String[] data = {"X", "Y", "Z"};
+
+    public Iterator&lt;String&gt; iterator() {
+        return new Iterator&lt;&gt;() {
+            private int index = 0;
+            public boolean hasNext() { return index &lt; data.length; }
+            public String next() { return data[index++]; }
+        };
+    }
+}</code></pre>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Java Comparable Review</title>
+    <style>
+        body { font-family: Arial, sans-serif; line-height: 1.6; margin: 20px; }
+        code { background: #f4f4f4; padding: 2px 5px; border-radius: 3px; }
+        pre { background: #f4f4f4; padding: 10px; border-left: 4px solid #007acc; overflow-x: auto; }
+        h1, h2, h3 { color: #007acc; }
+        .section { margin-bottom: 30px; }
+    </style>
+</head>
+<body>
+
+<h1>Java Comparable Interface - Review</h1>
+
+<div class="section">
+    <h2>📘 Overview</h2>
+    <p>The <code>Comparable&lt;T&gt;</code> interface defines a natural ordering for objects. It is used by sorting algorithms like <code>Collections.sort()</code> and <code>Arrays.sort()</code>.</p>
+</div>
+
+<div class="section">
+    <h2>🔑 Method</h2>
+    <pre><code>int compareTo(T other);</code></pre>
+    <ul>
+        <li>Returns <code>0</code> if this == other</li>
+        <li>Returns a negative number if this &lt; other</li>
+        <li>Returns a positive number if this &gt; other</li>
+    </ul>
+</div>
+
+<div class="section">
+    <h2>🧩 Example: Person Sort by Age</h2>
+    <pre><code>public class Person implements Comparable&lt;Person&gt; {
+    private String name;
+    private int age;
+
+    public int compareTo(Person other) {
+        return Integer.compare(this.age, other.age); // natural order: by age
+    }
+
+    public String toString() {
+        return name + " (" + age + ")";
+    }
+}</code></pre>
+    <pre><code>List&lt;Person&gt; people = Arrays.asList(
+    new Person("Alice", 32),
+    new Person("Bob", 24),
+    new Person("Charlie", 29)
+);
+
+Collections.sort(people); // uses compareTo
+</code></pre>
+</div>
+
+<div class="section">
+    <h2>✅ Rules and Best Practices</h2>
+    <ul>
+        <li>Be consistent with <code>equals()</code> (recommended)</li>
+        <li>Use safe comparisons like <code>Integer.compare()</code></li>
+        <li>Throw <code>NullPointerException</code> if argument is null (or handle gracefully)</li>
+        <li>Respect symmetry, transitivity, and consistency</li>
+    </ul>
+</div>
+
+<div class="section">
+    <h2>⚠️ Common Mistakes</h2>
+    <ul>
+        <li>Not implementing <code>Comparable</code> when sorting is required</li>
+        <li>Incorrect logic (e.g., reversed signs or bad comparisons)</li>
+        <li>Breaking <code>TreeSet</code> or <code>TreeMap</code> due to inconsistent compareTo()</li>
+    </ul>
+</div>
+
+<div class="section">
+    <h2>🧪 Built-in Support</h2>
+    <ul>
+        <li>All wrapper types like <code>Integer</code>, <code>Double</code>, <code>String</code> implement <code>Comparable</code></li>
+        <li>Allows sorting lists without providing a custom <code>Comparator</code></li>
+    </ul>
+    <pre><code>List&lt;Integer&gt; numbers = Arrays.asList(3, 1, 5);
+Collections.sort(numbers);</code></pre>
+</div>
+
+</body>
+</html>

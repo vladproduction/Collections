@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Java Comparator Review</title>
+    <style>
+        body { font-family: Arial, sans-serif; line-height: 1.6; margin: 20px; }
+        code { background: #f4f4f4; padding: 2px 5px; border-radius: 3px; }
+        pre { background: #f4f4f4; padding: 10px; border-left: 4px solid #007acc; overflow-x: auto; }
+        h1, h2, h3 { color: #007acc; }
+        .section { margin-bottom: 30px; }
+    </style>
+</head>
+<body>
+
+<h1>Java Comparator Interface - Review</h1>
+
+<div class="section">
+    <h2>📘 Overview</h2>
+    <p>The <code>Comparator&lt;T&gt;</code> interface allows custom sorting of objects outside of their natural order.</p>
+    <p>Useful for sorting with multiple criteria or when the class doesn’t implement <code>Comparable</code>.</p>
+</div>
+
+<div class="section">
+    <h2>🔑 Key Method</h2>
+    <pre><code>int compare(T o1, T o2);</code></pre>
+    <p>Returns:</p>
+    <ul>
+        <li><code>0</code> if equal</li>
+        <li>Negative if <code>o1 &lt; o2</code></li>
+        <li>Positive if <code>o1 &gt; o2</code></li>
+    </ul>
+</div>
+
+<div class="section">
+    <h2>🧩 Example: Sorting People</h2>
+    <pre><code>public class Person {
+    private String name;
+    private int age;
+
+    // getters, constructor, toString()...
+}
+
+List&lt;Person&gt; people = Arrays.asList(
+    new Person("Alice", 32),
+    new Person("Bob", 24),
+    new Person("Charlie", 29)
+);
+
+people.sort(Comparator.comparingInt(Person::getAge));
+people.sort(Comparator.comparing(Person::getName));
+people.sort(Comparator.comparing(Person::getName).reversed()
+             .thenComparingInt(Person::getAge));</code></pre>
+</div>
+
+<div class="section">
+    <h2>🔧 Functional Tools</h2>
+    <ul>
+        <li><code>Comparator.comparing()</code></li>
+        <li><code>.thenComparing()</code> – secondary sort</li>
+        <li><code>.reversed()</code> – reverse order</li>
+        <li><code>Comparator.naturalOrder()</code>, <code>Comparator.reverseOrder()</code></li>
+    </ul>
+</div>
+
+<div class="section">
+    <h2>🧠 Comparator vs Comparable</h2>
+    <table border="1" cellpadding="5">
+        <thead>
+        <tr><th>Feature</th><th>Comparable</th><th>Comparator</th></tr>
+        </thead>
+        <tbody>
+        <tr><td>In-class sort?</td><td>Yes</td><td>No (external)</td></tr>
+        <tr><td>Multiple sorts?</td><td>No</td><td>Yes</td></tr>
+        <tr><td>Usage</td><td><code>a.compareTo(b)</code></td><td><code>compare(a, b)</code></td></tr>
+        <tr><td>Functional?</td><td>Yes</td><td>Yes</td></tr>
+        </tbody>
+    </table>
+</div>
+
+<div class="section">
+    <h2>⚠️ Common Mistakes</h2>
+    <ul>
+        <li>Forgetting to chain with <code>thenComparing()</code></li>
+        <li>Using verbose compare logic instead of utility methods</li>
+        <li>Not handling <code>null</code> values (use <code>Comparator.nullsFirst()</code>)</li>
+    </ul>
+</div>
+
+<div class="section">
+    <h2>✅ Best Practice</h2>
+    <pre><code>// Clean and safe
+people.sort(Comparator.comparing(Person::getName)
+                      .thenComparingInt(Person::getAge)
+                      .reversed());</code></pre>
+</div>
+
+</body>
+</html>

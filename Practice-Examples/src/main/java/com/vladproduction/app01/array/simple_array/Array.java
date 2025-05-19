@@ -47,5 +47,15 @@ public class Array {
         //•Sort before search
         //•Otherwise results are unpredictable
 
+        Item item1 = new Item(1, "Item A");
+        Item item2 = new Item(2, "Item B");
+        Item[] items = {item1, item2};
+
+        for (Item item : items) {
+            System.out.println(item.id() + " " + item.name());
+        }
+
     }
+
+    record Item(int id, String name){}
 }

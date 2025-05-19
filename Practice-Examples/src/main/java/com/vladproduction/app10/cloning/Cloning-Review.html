@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Java Cloning - Shallow vs Deep Copy</title>
+    <style>
+        body { font-family: Arial, sans-serif; line-height: 1.6; padding: 20px; }
+        h1, h2, h3 { color: #007acc; }
+        code, pre {
+            background-color: #f4f4f4;
+            padding: 10px;
+            display: block;
+            border-left: 5px solid #ccc;
+            white-space: pre-wrap;
+        }
+        ul, ol { margin-left: 20px; }
+        table { border-collapse: collapse; margin-top: 10px; }
+        table, th, td { border: 1px solid #aaa; padding: 8px; }
+        th { background-color: #eee; }
+    </style>
+</head>
+<body>
+
+<h1>🧬 Java Cloning - Shallow vs Deep Copy</h1>
+
+<h2>📦 Recommended Package</h2>
+<pre><code>com.vladproduction.app10.cloning</code></pre>
+
+<h2>🔹 What is Cloning?</h2>
+<p>Cloning is creating a copy of an object. In Java, you typically use the <code>Cloneable</code> interface and <code>Object.clone()</code> method.</p>
+
+<h2>🧩 Cloneable Interface</h2>
+<ul>
+    <li>A marker interface (no methods)</li>
+    <li>Makes <code>clone()</code> available safely</li>
+</ul>
+
+<h3>Basic Example:</h3>
+<pre><code>public class Person implements Cloneable {
+    private String name;
+
+    @Override
+    public Person clone() {
+        try {
+            return (Person) super.clone();
+        } catch (CloneNotSupportedException e) {
+            throw new RuntimeException(e);
+        }
+    }
+}</code></pre>
+
+<h2>🔸 Shallow Copy</h2>
+<p>Clones the object and references. Changes to nested objects affect both original and clone.</p>
+
+<h3>Example:</h3>
+<pre><code>public class Address {
+    String city;
+
+    public Address(String city) {
+        this.city = city;
+    }
+}
+
+public class Person implements Cloneable {
+    String name;
+    Address address;
+
+    public Person(String name, Address address) {
+        this.name = name;
+        this.address = address;
+    }
+
+    @Override
+    public Person clone() {
+        try {
+            return (Person) super.clone(); // SHALLOW COPY
+        } catch (CloneNotSupportedException e) {
+            throw new RuntimeException(e);
+        }
+    }
+}</code></pre>
+
+<h3>Demo:</h3>
+<pre><code>Person p1 = new Person("Alice", new Address("NY"));
+Person p2 = p1.clone();
+
+p2.address.city = "LA"; // Affects p1 too!
+System.out.println(p1.address.city); // LA</code></pre>
+
+<h2>🔸 Deep Copy</h2>
+<p>Clones the object and all nested fields. Original and clone are completely independent.</p>
+
+<h3>Example:</h3>
+<pre><code>public class Person implements Cloneable {
+    String name;
+    Address address;
+
+    public Person(String name, Address address) {
+        this.name = name;
+        this.address = address;
+    }
+
+    @Override
+    public Person clone() {
+        try {
+            Person cloned = (Person) super.clone();
+            cloned.address = new Address(this.address.city); // DEEP COPY
+            return cloned;
+        } catch (CloneNotSupportedException e) {
+            throw new RuntimeException(e);
+        }
+    }
+}</code></pre>
+
+<h3>Demo:</h3>
+<pre><code>Person p1 = new Person("Alice", new Address("NY"));
+Person p2 = p1.clone();
+
+p2.address.city = "LA"; // Only affects p2
+System.out.println(p1.address.city); // NY</code></pre>
+
+<h2>🧪 Alternatives to <code>clone()</code></h2>
+<ul>
+    <li><strong>Copy constructors:</strong> use a constructor to manually copy fields</li>
+    <li><strong>Serialization-based cloning:</strong> serialize and deserialize to clone the object</li>
+</ul>
+
+<h3>Copy Constructor Example:</h3>
+<pre><code>public Person(Person other) {
+    this.name = other.name;
+    this.address = new Address(other.address.city);
+}</code></pre>
+
+<h2>🧠 Common Interview Questions</h2>
+<table>
+    <thead>
+    <tr><th>Question</th><th>Key Insight</th></tr>
+    </thead>
+    <tbody>
+    <tr>
+        <td>What is the difference between shallow and deep copy?</td>
+        <td>Shallow: references; Deep: full object tree</td>
+    </tr>
+    <tr>
+        <td>Why is <code>Cloneable</code> a marker?</td>
+        <td>No methods, just indicates support for cloning</td>
+    </tr>
+    <tr>
+        <td>Why avoid <code>clone()</code> in production?</td>
+        <td>Breaks encapsulation, returns <code>Object</code>, can be unsafe</td>
+    </tr>
+    </tbody>
+</table>
+
+<h2>✅ Summary</h2>
+<ul>
+    <li><strong>Shallow Copy:</strong> fast but dangerous if mutable fields exist</li>
+    <li><strong>Deep Copy:</strong> safe but more complex</li>
+    <li><strong>Best Practice:</strong> Prefer copy constructors or custom cloning over using <code>Cloneable</code></li>
+</ul>
+
+</body>
+</html>

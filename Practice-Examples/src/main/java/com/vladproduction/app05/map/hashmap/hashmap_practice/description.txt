@@ -1,5 +1,0 @@
--map cannot contain duplicate keys;
--each key can map at most one value;
--to put another value by existing key, stands latest(overridden) version value by this key;
--map.size();
--map.get(key);
