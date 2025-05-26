@@ -43,12 +43,3 @@ Unit tests have been written to validate functionality and ensure correctness:
 - Well-structured with dedicated packages and tests.
 
 ---
-
-## 🧪 Getting Started
-
-To run this project:
-
-1. Clone the repository:
-   ```bash
-   git clone https://github.com/your-username/data-structures-java.git
-   cd data-structures-java
