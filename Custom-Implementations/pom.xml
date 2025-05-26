@@ -5,7 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.vladproduction</groupId>
-    <artifactId>Collections-Implementations</artifactId>
+    <artifactId>Custom-Implementations</artifactId>
     <version>1.0-SNAPSHOT</version>
 
     <properties>
