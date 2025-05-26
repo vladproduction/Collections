@@ -1,9 +1,0 @@
--an ordered collection aka sequence;
--allow duplicates;
--not fixed in size like arrays;
--fast for data retrievals;
--various implementation:
-    *ArrayList;
-    *Stack;
-    *Vector;
-    *Others;

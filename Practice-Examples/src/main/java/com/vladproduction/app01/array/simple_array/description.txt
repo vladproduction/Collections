@@ -1,6 +1,0 @@
-Some of the array properties:
- - fixed in size;
- - fast for data retrievals;
- - compact memory usage if size is known;
- - delete operation very hard;
- - 2D Arrays;
