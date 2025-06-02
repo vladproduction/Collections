@@ -30,8 +30,6 @@ Unit tests have been written to validate functionality and ensure correctness:
 - ✔️ `Queue` tests  
 - ✔️ `Stack` tests  
 
-> *Note: `Generic` and `Iterator` functionalities are tested implicitly within the structure-specific tests.*
-
 ---
 
 ## 💡 Features

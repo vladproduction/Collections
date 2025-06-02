@@ -1,0 +1,641 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stack Dynamic Resizing - Interactive Visualization</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #333;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        h1 {
+            text-align: center;
+            color: white;
+            margin-bottom: 30px;
+            font-size: 2.5em;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .main-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+
+        .card {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            backdrop-filter: blur(10px);
+        }
+
+        .controls {
+            text-align: center;
+        }
+
+        .controls h3 {
+            margin-bottom: 20px;
+            color: #4a5568;
+            font-size: 1.5em;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-bottom: 20px;
+        }
+
+        button {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        .push-btn {
+            background: linear-gradient(45deg, #4CAF50, #45a049);
+            color: white;
+        }
+
+        .pop-btn {
+            background: linear-gradient(45deg, #f44336, #da190b);
+            color: white;
+        }
+
+        .clear-btn {
+            background: linear-gradient(45deg, #ff9800, #f57c00);
+            color: white;
+        }
+
+        .auto-btn {
+            background: linear-gradient(45deg, #2196F3, #1976D2);
+            color: white;
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.2);
+        }
+
+        button:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .stat-item {
+            background: linear-gradient(45deg, #e3f2fd, #bbdefb);
+            padding: 15px;
+            border-radius: 10px;
+            text-align: center;
+            border-left: 4px solid #2196F3;
+        }
+
+        .stat-label {
+            font-size: 12px;
+            color: #666;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .stat-value {
+            font-size: 24px;
+            font-weight: bold;
+            color: #1976D2;
+            margin-top: 5px;
+        }
+
+        .visualization {
+            text-align: center;
+        }
+
+        .stack-container {
+            perspective: 1000px;
+            margin: 20px 0;
+        }
+
+        .stack {
+            display: flex;
+            flex-direction: column-reverse;
+            align-items: center;
+            min-height: 400px;
+            justify-content: flex-start;
+            padding: 20px;
+            background: linear-gradient(180deg, #f8f9fa, #e9ecef);
+            border-radius: 15px;
+            border: 3px dashed #6c757d;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .stack-element {
+            width: 80px;
+            height: 40px;
+            background: linear-gradient(45deg, #FF6B6B, #FF8E8E);
+            border: 2px solid #FF4757;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 2px 0;
+            font-weight: bold;
+            color: white;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
+            animation: slideIn 0.5s ease-out;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+        }
+
+        .stack-element:hover {
+            transform: scale(1.05);
+            z-index: 10;
+        }
+
+        .stack-element.top {
+            background: linear-gradient(45deg, #4ECDC4, #44A08D);
+            border-color: #26A69A;
+            box-shadow: 0 6px 15px rgba(0,0,0,0.3);
+            transform: scale(1.1);
+        }
+
+        .capacity-indicator {
+            position: absolute;
+            top: 10px;
+            right: 15px;
+            background: rgba(255,255,255,0.9);
+            padding: 8px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: bold;
+            border: 2px solid #007bff;
+        }
+
+        .resize-animation {
+            animation: resize 1s ease-in-out;
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateY(-50px) rotateX(90deg);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0) rotateX(0);
+                opacity: 1;
+            }
+        }
+
+        @keyframes slideOut {
+            from {
+                transform: translateY(0) rotateX(0);
+                opacity: 1;
+            }
+            to {
+                transform: translateY(-50px) rotateX(90deg);
+                opacity: 0;
+            }
+        }
+
+        @keyframes resize {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); background: #ffeb3b; }
+        }
+
+        .resize-notification {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: linear-gradient(45deg, #FF9800, #F57C00);
+            color: white;
+            padding: 20px 30px;
+            border-radius: 15px;
+            font-size: 18px;
+            font-weight: bold;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            z-index: 1000;
+            animation: notification 2s ease-in-out;
+        }
+
+        @keyframes notification {
+            0%, 100% { opacity: 0; transform: translate(-50%, -50%) scale(0.8); }
+            20%, 80% { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+        }
+
+        .info-section {
+            grid-column: 1 / -1;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+        }
+
+        .info-card {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+
+        .info-card h4 {
+            margin-bottom: 15px;
+            font-size: 1.2em;
+            border-bottom: 2px solid rgba(255,255,255,0.3);
+            padding-bottom: 8px;
+        }
+
+        .info-card ul {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .info-card li {
+            margin: 8px 0;
+            padding-left: 20px;
+            position: relative;
+        }
+
+        .info-card li:before {
+            content: "▶";
+            position: absolute;
+            left: 0;
+            color: #FFD700;
+        }
+
+        @media (max-width: 768px) {
+            .main-content {
+                grid-template-columns: 1fr;
+            }
+            
+            .button-group {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            button {
+                width: 200px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔄 Stack Dynamic Resizing Visualization (ArrayList based)</h1>
+        
+        <div class="main-content">
+            <div class="card controls">
+                <h3>📊 Stack Operations</h3>
+                <div class="button-group">
+                    <button class="push-btn" onclick="pushElement()">➕ Push Element</button>
+                    <button class="pop-btn" onclick="popElement()">➖ Pop Element</button>
+                    <button class="clear-btn" onclick="clearStack()">🗑️ Clear Stack</button>
+                    <button class="auto-btn" onclick="autoDemo()" id="autoBtn">🎭 Auto Demo</button>
+                </div>
+                
+                <div class="stats">
+                    <div class="stat-item">
+                        <div class="stat-label">Size</div>
+                        <div class="stat-value" id="size">0</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-label">Capacity</div>
+                        <div class="stat-value" id="capacity">10</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-label">Resizes</div>
+                        <div class="stat-value" id="resizes">0</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-label">Top Element</div>
+                        <div class="stat-value" id="topElement">-</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card visualization">
+                <h3>🏗️ Stack Visualization</h3>
+                <div class="stack-container">
+                    <div class="stack" id="stack">
+                        <div class="capacity-indicator" id="capacityIndicator">
+                            Capacity: <span id="capacityDisplay">10</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="info-section">
+            <h3 style="text-align: center; margin-bottom: 25px; color: #4a5568;">📚 How Dynamic Resizing Works</h3>
+            <div class="info-grid">
+                <div class="info-card">
+                    <h4>🔧 Internal Mechanism</h4>
+                    <ul>
+                        <li>ArrayList starts with initial capacity (default: 10)</li>
+                        <li>When size exceeds capacity, creates new larger array</li>
+                        <li>New capacity = old capacity × 1.5 (growth factor)</li>
+                        <li>Copies all elements to new array</li>
+                        <li>Old array gets garbage collected</li>
+                    </ul>
+                </div>
+                
+                <div class="info-card">
+                    <h4>⚡ Performance Characteristics</h4>
+                    <ul>
+                        <li>Most push() operations: O(1) constant time</li>
+                        <li>Resize operation: O(n) linear time</li>
+                        <li>Amortized complexity: O(1) average</li>
+                        <li>Memory efficient: grows only when needed</li>
+                        <li>No manual capacity management required</li>
+                    </ul>
+                </div>
+                
+                <div class="info-card">
+                    <h4>💡 Key Benefits</h4>
+                    <ul>
+                        <li>Automatic scaling without size limits</li>
+                        <li>Memory efficient growth strategy</li>
+                        <li>Transparent to stack users</li>
+                        <li>Handles large datasets seamlessly</li>
+                        <li>Optimized for frequent insertions</li>
+                    </ul>
+                </div>
+                
+                <div class="info-card">
+                    <h4>🎯 Real-World Applications</h4>
+                    <ul>
+                        <li>Function call management</li>
+                        <li>Undo/Redo operations</li>
+                        <li>Expression evaluation</li>
+                        <li>Browser history navigation</li>
+                        <li>Recursive algorithm support</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        class VisualStack {
+            constructor() {
+                this.elements = [];
+                this.capacity = 10;
+                this.resizeCount = 0;
+                this.elementCounter = 1;
+                this.isAutoDemo = false;
+            }
+
+            push(value) {
+                if (this.elements.length >= this.capacity) {
+                    this.resize();
+                }
+                
+                this.elements.push(value || this.elementCounter++);
+                this.updateDisplay();
+                this.addVisualElement(this.elements[this.elements.length - 1]);
+            }
+
+            pop() {
+                if (this.elements.length === 0) {
+                    alert("Stack is empty! Cannot pop.");
+                    return null;
+                }
+
+                const poppedElement = this.elements.pop();
+                this.removeVisualElement();
+                this.updateDisplay();
+                return poppedElement;
+            }
+
+            resize() {
+                const oldCapacity = this.capacity;
+                this.capacity = Math.floor(this.capacity * 1.5);
+                this.resizeCount++;
+                
+                // Show resize animation
+                const stack = document.getElementById('stack');
+                stack.classList.add('resize-animation');
+                
+                // Show notification
+                this.showResizeNotification(oldCapacity, this.capacity);
+                
+                setTimeout(() => {
+                    stack.classList.remove('resize-animation');
+                }, 1000);
+                
+                this.updateDisplay();
+            }
+
+            clear() {
+                this.elements = [];
+                this.capacity = 10;
+                this.resizeCount = 0;
+                this.elementCounter = 1;
+                this.clearVisualElements();
+                this.updateDisplay();
+            }
+
+            updateDisplay() {
+                document.getElementById('size').textContent = this.elements.length;
+                document.getElementById('capacity').textContent = this.capacity;
+                document.getElementById('resizes').textContent = this.resizeCount;
+                document.getElementById('topElement').textContent = 
+                    this.elements.length > 0 ? this.elements[this.elements.length - 1] : '-';
+                document.getElementById('capacityDisplay').textContent = this.capacity;
+                
+                // Update capacity indicator color
+                const indicator = document.getElementById('capacityIndicator');
+                const utilizationRatio = this.elements.length / this.capacity;
+                
+                if (utilizationRatio >= 0.8) {
+                    indicator.style.borderColor = '#ff4757';
+                    indicator.style.background = 'rgba(255, 71, 87, 0.1)';
+                } else if (utilizationRatio >= 0.6) {
+                    indicator.style.borderColor = '#ff9f43';
+                    indicator.style.background = 'rgba(255, 159, 67, 0.1)';
+                } else {
+                    indicator.style.borderColor = '#007bff';
+                    indicator.style.background = 'rgba(255, 255, 255, 0.9)';
+                }
+            }
+
+            addVisualElement(value) {
+                const stack = document.getElementById('stack');
+                const element = document.createElement('div');
+                element.className = 'stack-element';
+                element.textContent = value;
+                element.style.animationDelay = '0s';
+                
+                // Mark the top element
+                const previousTop = stack.querySelector('.stack-element.top');
+                if (previousTop) {
+                    previousTop.classList.remove('top');
+                }
+                element.classList.add('top');
+                
+                stack.appendChild(element);
+            }
+
+            removeVisualElement() {
+                const stack = document.getElementById('stack');
+                const topElement = stack.querySelector('.stack-element.top');
+                
+                if (topElement) {
+                    topElement.style.animation = 'slideOut 0.5s ease-out forwards';
+                    setTimeout(() => {
+                        if (topElement.parentNode) {
+                            topElement.parentNode.removeChild(topElement);
+                            
+                            // Mark new top element
+                            const newTop = stack.querySelector('.stack-element:last-child');
+                            if (newTop) {
+                                newTop.classList.add('top');
+                            }
+                        }
+                    }, 500);
+                }
+            }
+
+            clearVisualElements() {
+                const stack = document.getElementById('stack');
+                const elements = stack.querySelectorAll('.stack-element');
+                elements.forEach(element => {
+                    element.style.animation = 'slideOut 0.3s ease-out forwards';
+                });
+                
+                setTimeout(() => {
+                    elements.forEach(element => {
+                        if (element.parentNode) {
+                            element.parentNode.removeChild(element);
+                        }
+                    });
+                }, 300);
+            }
+
+            showResizeNotification(oldCapacity, newCapacity) {
+                const notification = document.createElement('div');
+                notification.className = 'resize-notification';
+                notification.innerHTML = `
+                    🔄 RESIZING!<br>
+                    Capacity: ${oldCapacity} → ${newCapacity}
+                `;
+                
+                document.body.appendChild(notification);
+                
+                setTimeout(() => {
+                    if (notification.parentNode) {
+                        notification.parentNode.removeChild(notification);
+                    }
+                }, 2000);
+            }
+
+            async autoDemo() {
+                this.isAutoDemo = true;
+                const autoBtn = document.getElementById('autoBtn');
+                autoBtn.disabled = true;
+                autoBtn.textContent = '⏳ Running Demo...';
+                
+                // Clear first
+                this.clear();
+                await this.sleep(1000);
+                
+                // Push elements to trigger first resize
+                for (let i = 1; i <= 12; i++) {
+                    this.push(i);
+                    await this.sleep(300);
+                }
+                
+                await this.sleep(1000);
+                
+                // Pop some elements
+                for (let i = 0; i < 5; i++) {
+                    this.pop();
+                    await this.sleep(200);
+                }
+                
+                await this.sleep(500);
+                
+                // Push more to trigger another resize
+                for (let i = 101; i <= 108; i++) {
+                    this.push(i);
+                    await this.sleep(250);
+                }
+                
+                this.isAutoDemo = false;
+                autoBtn.disabled = false;
+                autoBtn.textContent = '🎭 Auto Demo';
+            }
+
+            sleep(ms) {
+                return new Promise(resolve => setTimeout(resolve, ms));
+            }
+        }
+
+        // Initialize the visual stack
+        const visualStack = new VisualStack();
+
+        // Button handlers
+        function pushElement() {
+            if (!visualStack.isAutoDemo) {
+                visualStack.push();
+            }
+        }
+
+        function popElement() {
+            if (!visualStack.isAutoDemo) {
+                visualStack.pop();
+            }
+        }
+
+        function clearStack() {
+            if (!visualStack.isAutoDemo) {
+                visualStack.clear();
+            }
+        }
+
+        function autoDemo() {
+            visualStack.autoDemo();
+        }
+
+        // Initialize display
+        visualStack.updateDisplay();
+    </script>
+</body>
+</html>

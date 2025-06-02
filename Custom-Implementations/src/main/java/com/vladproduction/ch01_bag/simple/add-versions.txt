@@ -1,0 +1,37 @@
+
+    /*1) new Object [data.length * 2]
+    @Override
+    public void add(Object o) {
+        if(size==data.length){
+            Object [] tmp = new Object[data.length*2];
+            for (int i = 0; i<data.length; i++){
+                tmp [i] = data [i];
+            }
+            data = tmp;
+        }
+        data[size] = o;
+        size++;
+    }*/
+
+    /*2) Arrays.copyOf
+    @Override
+    public void add(Object o) {
+        if(size >= data.length){
+            Object [] tmp = Arrays.copyOf(data,10);
+            data = tmp;
+        }
+        data [size] = o;
+        size++;
+    }*/
+
+    /*3) System.arraycopy
+    @Override
+    public void add(Object o) {
+        if(size >= data.length){
+            Object [] tmp = new Object[10];
+            System.arraycopy(data,0,tmp,0,data.length);
+            data = tmp;
+        }
+        data [size] = o;
+        size++;
+    }*/
