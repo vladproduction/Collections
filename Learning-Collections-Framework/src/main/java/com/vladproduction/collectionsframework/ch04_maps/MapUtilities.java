@@ -1,0 +1,209 @@
+package com.vladproduction.collectionsframework.ch04_maps;
+
+import java.util.*;
+import java.util.function.BiFunction;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
+
+/**
+ * Utility class providing helper methods for working with Maps.
+ * Includes common operations like safe retrieval, merging,
+ * filtering, transforming, and more.
+ */
+public class MapUtilities {
+
+    /**
+     * Safely retrieves a value from the map or returns a default if the key is absent.
+     *
+     * @param map the map to query
+     * @param key the key whose value to retrieve
+     * @param defaultValue the default value if key is not found
+     * @param <K> key type
+     * @param <V> value type
+     * @return value associated with key or defaultValue if not present
+     */
+    public static <K, V> V getOrDefault(Map<K, V> map, K key, V defaultValue) {
+        if (map == null) return defaultValue;
+        return map.getOrDefault(key, defaultValue);
+    }
+
+    /**
+     * Merges two maps into a new map, resolving conflicts using the provided resolver function.
+     *
+     * @param first the first map
+     * @param second the second map
+     * @param conflictResolver function to resolve value conflicts
+     * @param <K> key type
+     * @param <V> value type
+     * @return a new merged map
+     */
+    public static <K, V> Map<K, V> mergeMaps(Map<K, V> first, Map<K, V> second, BiFunction<V, V, V> conflictResolver) {
+        Map<K, V> result = new LinkedHashMap<>();
+        if (first != null) result.putAll(first);
+        if (second != null) {
+            for (Map.Entry<K, V> entry : second.entrySet()) {
+                result.merge(entry.getKey(), entry.getValue(), conflictResolver);
+            }
+        }
+        return result;
+    }
+
+    /**
+     * Filters a map by a predicate applied on entries.
+     *
+     * @param map the input map
+     * @param predicate the filter predicate
+     * @param <K> key type
+     * @param <V> value type
+     * @return a new filtered map
+     */
+    public static <K, V> Map<K, V> filter(Map<K, V> map, Predicate<Map.Entry<K, V>> predicate) {
+        if (map == null) return Collections.emptyMap();
+        return map.entrySet()
+                .stream()
+                .filter(predicate)
+                .collect(Collectors.toMap(
+                        Map.Entry::getKey,
+                        Map.Entry::getValue,
+                        (v1, v2) -> v1,
+                        LinkedHashMap::new
+                ));
+    }
+
+    /**
+     * Transforms values in the map using a mapping function.
+     *
+     * @param map the input map
+     * @param mapper function to transform values
+     * @param <K> key type
+     * @param <V> original value type
+     * @param <R> result value type
+     * @return a new map with transformed values
+     */
+    public static <K, V, R> Map<K, R> mapValues(Map<K, V> map, java.util.function.Function<V, R> mapper) {
+        if (map == null) return Collections.emptyMap();
+        return map.entrySet()
+                .stream()
+                .collect(Collectors.toMap(
+                        Map.Entry::getKey,
+                        e -> mapper.apply(e.getValue()),
+                        (r1, r2) -> r1,
+                        LinkedHashMap::new
+                ));
+    }
+
+    /**
+     * Safely retrieves a value by key and casts it to the desired type.
+     *
+     * @param map the map to query
+     * @param key the key to retrieve
+     * @param clazz the class object of the desired type
+     * @param <K> key type
+     * @param <V> value type
+     * @return cast value or null if absent or incompatible
+     */
+    public static <K, V> V getAsType(Map<K, ?> map, K key, Class<V> clazz) {
+        if (map == null) return null;
+        Object value = map.get(key);
+        if (clazz.isInstance(value)) {
+            return clazz.cast(value);
+        }
+        return null;
+    }
+
+    /**
+     * Creates an immutable copy of a map.
+     *
+     * @param map the input map
+     * @param <K> key type
+     * @param <V> value type
+     * @return an unmodifiable map copy
+     */
+    public static <K, V> Map<K, V> immutableCopy(Map<K, V> map) {
+        if (map == null) return Collections.emptyMap();
+        return Collections.unmodifiableMap(new LinkedHashMap<>(map));
+    }
+
+    /**
+     * Swaps keys and values in a map. If duplicate values exist, last wins.
+     *
+     * @param map the input map
+     * @param <K> original key type
+     * @param <V> original value type (becomes new key type)
+     * @return a new map with keys and values swapped
+     */
+    public static <K, V> Map<V, K> invert(Map<K, V> map) {
+        if (map == null) return Collections.emptyMap();
+        Map<V, K> inverted = new LinkedHashMap<>();
+        for (Map.Entry<K, V> entry : map.entrySet()) {
+            inverted.put(entry.getValue(), entry.getKey());
+        }
+        return inverted;
+    }
+
+    /**
+     * Creates a map from keys generated by applying a keyMapper function to the input collection.
+     *
+     * @param values input collection of values
+     * @param keyMapper function to generate keys from values
+     * @param <K> key type
+     * @param <V> value type
+     * @return a map of generated keys to values
+     */
+    public static <K, V> Map<K, V> fromCollection(Collection<V> values, java.util.function.Function<V, K> keyMapper) {
+        if (values == null) return Collections.emptyMap();
+        return values.stream()
+                .collect(Collectors.toMap(
+                        keyMapper,
+                        v -> v,
+                        (v1, v2) -> v1,
+                        LinkedHashMap::new
+                ));
+    }
+
+    /**
+     * Counts frequency of each element in a collection and returns a map.
+     *
+     * @param values input collection
+     * @param <V> value type
+     * @return map of element frequencies
+     */
+    public static <V> Map<V, Integer> frequencyMap(Collection<V> values) {
+        if (values == null) return Collections.emptyMap();
+        Map<V, Integer> freq = new LinkedHashMap<>();
+        for (V v : values) {
+            freq.merge(v, 1, Integer::sum);
+        }
+        return freq;
+    }
+
+    /**
+     * Safely clears a map if not null.
+     *
+     * @param map the map to clear
+     * @param <K> key type
+     * @param <V> value type
+     */
+    public static <K, V> void safeClear(Map<K, V> map) {
+        if (map != null) {
+            map.clear();
+        }
+    }
+
+    /**
+     * Returns true if map contains the specified key and value.
+     *
+     * @param map the map to check
+     * @param key the key
+     * @param value the value
+     * @param <K> key type
+     * @param <V> value type
+     * @return true if map contains key-value mapping
+     */
+    public static <K, V> boolean containsEntry(Map<K, V> map, K key, V value) {
+        if (map == null) return false;
+        return Objects.equals(map.get(key), value);
+    }
+
+
+}

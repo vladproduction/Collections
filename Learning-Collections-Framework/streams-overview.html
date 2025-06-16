@@ -1,0 +1,796 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Java Streams - Complete Overview</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      line-height: 1.6;
+      color: #333;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      padding: 20px;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(10px);
+      border-radius: 20px;
+      padding: 40px;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+    }
+
+    h1 {
+      text-align: center;
+      color: #2c3e50;
+      margin-bottom: 30px;
+      font-size: 2.5em;
+      background: linear-gradient(45deg, #3498db, #e74c3c);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    h2 {
+      color: #34495e;
+      margin: 30px 0 15px 0;
+      padding-bottom: 10px;
+      border-bottom: 3px solid #3498db;
+      font-size: 1.8em;
+    }
+
+    h3 {
+      color: #d3e5f1;
+      margin: 20px 0 10px 0;
+      font-size: 1.4em;
+    }
+
+    h4 {
+      color: #8e44ad;
+      margin: 15px 0 8px 0;
+      font-size: 1.2em;
+    }
+
+    .project-info {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      border-radius: 15px;
+      padding: 30px;
+      margin: 30px 0;
+      color: white;
+      text-align: center;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    }
+
+    .project-classes {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 20px;
+      margin-top: 20px;
+    }
+
+    .class-badge {
+      background: rgba(255, 255, 255, 0.2);
+      padding: 15px;
+      border-radius: 10px;
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+    }
+
+    .class-badge h4 {
+      color: #fff;
+      margin: 0 0 5px 0;
+      font-size: 1.1em;
+    }
+
+    .class-badge p {
+      color: #e0e0e0;
+      font-size: 0.9em;
+    }
+
+    .stream-flow {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      border-radius: 15px;
+      padding: 30px;
+      margin: 30px 0;
+      color: white;
+      overflow-x: auto;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    }
+
+    .flow-diagram {
+      font-family: 'Courier New', monospace;
+      font-size: 16px;
+      line-height: 2;
+      white-space: pre;
+      text-align: center;
+    }
+
+    .operation-type {
+      background: linear-gradient(45deg, #ff6b6b, #ee5a24);
+      color: white;
+      padding: 6px 12px;
+      border-radius: 8px;
+      font-weight: bold;
+      display: inline-block;
+      margin: 3px 6px;
+      box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2);
+    }
+
+    .intermediate {
+      background: linear-gradient(45deg, #26d0ce, #1dd1a1);
+    }
+
+    .terminal {
+      background: linear-gradient(45deg, #feca57, #ff9ff3);
+    }
+
+    .comparison-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 20px 0;
+      background: white;
+      border-radius: 10px;
+      overflow: hidden;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+    }
+
+    .comparison-table th {
+      background: linear-gradient(45deg, #3498db, #2980b9);
+      color: white;
+      padding: 15px;
+      text-align: left;
+      font-weight: bold;
+    }
+
+    .comparison-table td {
+      padding: 12px 15px;
+      border-bottom: 1px solid #eee;
+    }
+
+    .comparison-table tr:hover {
+      background: #f8f9fa;
+    }
+
+    .code-block {
+      background: #2c3e50;
+      color: #ecf0f1;
+      padding: 20px;
+      border-radius: 10px;
+      margin: 15px 0;
+      font-family: 'Courier New', monospace;
+      overflow-x: auto;
+      border-left: 4px solid #3498db;
+    }
+
+    .highlight {
+      background: #fff3cd;
+      border: 1px solid #ffeaa7;
+      border-radius: 5px;
+      padding: 15px;
+      margin: 15px 0;
+    }
+
+    .feature-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+      gap: 20px;
+      margin: 20px 0;
+    }
+
+    .feature-card {
+      background: white;
+      border-radius: 10px;
+      padding: 20px;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+      border-left: 4px solid #3498db;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .feature-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+    }
+
+    .pros-cons {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+      margin: 15px 0;
+    }
+
+    .pros, .cons {
+      padding: 15px;
+      border-radius: 8px;
+    }
+
+    .pros {
+      background: #d4edda;
+      border-left: 4px solid #28a745;
+    }
+
+    .cons {
+      background: #f8d7da;
+      border-left: 4px solid #dc3545;
+    }
+
+    ul, ol {
+      margin-left: 20px;
+      margin-bottom: 15px;
+    }
+
+    li {
+      margin-bottom: 5px;
+    }
+
+    .nav-menu {
+      background: rgba(52, 73, 94, 0.9);
+      border-radius: 10px;
+      padding: 15px;
+      margin-bottom: 30px;
+      text-align: center;
+    }
+
+    .nav-menu a {
+      color: white;
+      text-decoration: none;
+      margin: 0 15px;
+      padding: 8px 12px;
+      border-radius: 5px;
+      transition: background 0.3s;
+      display: inline-block;
+    }
+
+    .nav-menu a:hover {
+      background: rgba(255, 255, 255, 0.2);
+    }
+
+    .performance-card {
+      background: linear-gradient(45deg, #667eea, #764ba2);
+      color: white;
+      border-radius: 10px;
+      padding: 20px;
+      margin: 15px 0;
+    }
+
+    .performance-card h4 {
+      color: white;
+      margin-bottom: 10px;
+    }
+
+    @media (max-width: 768px) {
+      .container {
+        padding: 20px;
+      }
+
+      .feature-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .pros-cons {
+        grid-template-columns: 1fr;
+      }
+
+      .nav-menu a {
+        display: block;
+        margin: 5px 0;
+      }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <h1>Java Streams - Complete Overview</h1>
+
+  <nav class="nav-menu">
+    <a href="#introduction">Introduction</a>
+    <a href="#project-overview">Project Overview</a>
+    <a href="#stream-basics">Stream Basics</a>
+    <a href="#operations">Operations</a>
+    <a href="#collection-streams">Collection Streams</a>
+    <a href="#parallel-streams">Parallel Streams</a>
+    <a href="#performance">Performance</a>
+  </nav>
+
+  <section id="project-overview">
+    <h2>Project Overview</h2>
+    <div class="project-info">
+      <h3>📁 Streams Package Structure</h3>
+      <p>Our comprehensive streams project includes three main classes covering different aspects of Java Streams API:</p>
+      <div class="project-classes">
+        <div class="class-badge">
+          <h4>🟦 StreamBasics.java</h4>
+          <p>Fundamental stream operations, creation, and basic transformations</p>
+        </div>
+        <div class="class-badge">
+          <h4>🟩 CollectionStreams.java</h4>
+          <p>Working with collections, filtering, mapping, and collecting results</p>
+        </div>
+        <div class="class-badge">
+          <h4>🟨 ParallelStreams.java</h4>
+          <p>Parallel processing, performance optimization, and thread safety</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="introduction">
+    <h2>Introduction to Java Streams</h2>
+    <p>Java Streams API, introduced in Java 8, provides a functional approach to processing collections of objects. Streams allow you to express complex data processing queries in a declarative way.</p>
+
+    <div class="highlight">
+      <strong>Key Benefits of Streams:</strong>
+      <ul>
+        <li>Declarative programming style - focus on <em>what</em> rather than <em>how</em></li>
+        <li>Functional programming paradigms with lambda expressions</li>
+        <li>Built-in support for parallel processing</li>
+        <li>Lazy evaluation for better performance</li>
+        <li>Composable operations for complex data transformations</li>
+        <li>Improved code readability and maintainability</li>
+      </ul>
+    </div>
+
+    <div class="stream-flow">
+      <h3>Stream Processing Flow</h3>
+      <div class="flow-diagram">
+        Data Source → <span class="operation-type">Create Stream</span> → <span class="operation-type intermediate">Intermediate Operations</span> → <span class="operation-type terminal">Terminal Operation</span> → Result
+
+        Examples:
+        Collection → stream() → filter() → map() → collect() → List
+        Array → Arrays.stream() → sorted() → limit() → forEach() → void
+        Files → lines() → distinct() → count() → Long
+      </div>
+    </div>
+  </section>
+
+  <section id="stream-basics">
+    <h2>Stream Basics (StreamBasics.java)</h2>
+    <p>Understanding the fundamental concepts and creation of streams.</p>
+
+    <div class="feature-grid">
+      <div class="feature-card">
+        <h4>Creating Streams</h4>
+        <div class="code-block">
+          // From Collections
+          List&lt;String&gt; list = Arrays.asList("a", "b", "c");
+          Stream&lt;String&gt; stream = list.stream();
+
+          // From Arrays
+          String[] array = {"x", "y", "z"};
+          Stream&lt;String&gt; stream2 = Arrays.stream(array);
+
+          // Using Stream.of()
+          Stream&lt;String&gt; stream3 = Stream.of("1", "2", "3");
+
+          // Infinite Streams
+          Stream&lt;String&gt; stream4 = Stream.generate(() -&gt; "element");
+          Stream&lt;Integer&gt; stream5 = Stream.iterate(0, n -&gt; n + 1);
+        </div>
+      </div>
+
+      <div class="feature-card">
+        <h4>Stream Characteristics</h4>
+        <ul>
+          <li><strong>Not a Data Structure:</strong> Streams don't store elements</li>
+          <li><strong>Functional:</strong> Operations produce a result without modifying source</li>
+          <li><strong>Lazy:</strong> Intermediate operations are not executed until terminal operation</li>
+          <li><strong>Consumable:</strong> Elements can only be visited once</li>
+          <li><strong>Possibly Unbounded:</strong> Can work with infinite data</li>
+        </ul>
+      </div>
+
+      <div class="feature-card">
+        <h4>Basic Operations Example</h4>
+        <div class="code-block">
+          List&lt;String&gt; words = Arrays.asList("Java", "Stream", "API", "Lambda");
+
+          // Basic filtering and transformation
+          List&lt;String&gt; result = words.stream()
+          .filter(word -&gt; word.length() &gt; 3)  // Filter words longer than 3
+          .map(String::toUpperCase)           // Transform to uppercase
+          .sorted()                           // Sort alphabetically
+          .collect(Collectors.toList());      // Collect to List
+
+          // Result: ["JAVA", "LAMBDA", "STREAM"]
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="operations">
+    <h2>Stream Operations</h2>
+    <p>Stream operations are divided into intermediate and terminal operations.</p>
+
+    <h3>Intermediate Operations</h3>
+    <div class="feature-grid">
+      <div class="feature-card">
+        <h4>filter()</h4>
+        <p>Returns a stream with elements matching the given predicate.</p>
+        <div class="code-block">
+          list.stream()
+          .filter(s -&gt; s.startsWith("J"))
+          .collect(Collectors.toList());
+        </div>
+      </div>
+
+      <div class="feature-card">
+        <h4>map()</h4>
+        <p>Transforms elements by applying a function to each element.</p>
+        <div class="code-block">
+          list.stream()
+          .map(String::length)
+          .collect(Collectors.toList());
+        </div>
+      </div>
+
+      <div class="feature-card">
+        <h4>flatMap()</h4>
+        <p>Flattens nested structures into a single stream.</p>
+        <div class="code-block">
+          List&lt;List&lt;String&gt;&gt; nested = Arrays.asList(
+          Arrays.asList("a", "b"),
+          Arrays.asList("c", "d")
+          );
+          nested.stream()
+          .flatMap(Collection::stream)
+          .collect(Collectors.toList()); // ["a", "b", "c", "d"]
+        </div>
+      </div>
+
+      <div class="feature-card">
+        <h4>sorted() / distinct() / limit()</h4>
+        <div class="code-block">
+          list.stream()
+          .distinct()           // Remove duplicates
+          .sorted()             // Sort elements
+          .limit(10)            // Take first 10
+          .skip(2)              // Skip first 2
+          .collect(Collectors.toList());
+        </div>
+      </div>
+    </div>
+
+    <h3>Terminal Operations</h3>
+    <div class="feature-grid">
+      <div class="feature-card">
+        <h4>collect()</h4>
+        <p>Accumulates elements into a collection or other data structure.</p>
+        <div class="code-block">
+          // To List
+          List&lt;String&gt; list = stream.collect(Collectors.toList());
+
+          // To Set
+          Set&lt;String&gt; set = stream.collect(Collectors.toSet());
+
+          // To Map
+          Map&lt;String, Integer&gt; map = stream.collect(
+          Collectors.toMap(s -&gt; s, String::length)
+          );
+
+          // Grouping
+          Map&lt;Integer, List&lt;String&gt;&gt; grouped = stream.collect(
+          Collectors.groupingBy(String::length)
+          );
+        </div>
+      </div>
+
+      <div class="feature-card">
+        <h4>reduce()</h4>
+        <p>Performs a reduction on the elements using an associative function.</p>
+        <div class="code-block">
+          // Sum of lengths
+          int sum = words.stream()
+          .mapToInt(String::length)
+          .reduce(0, Integer::sum);
+
+          // Concatenation
+          String result = words.stream()
+          .reduce("", (a, b) -&gt; a + b);
+
+          // Finding maximum
+          Optional&lt;String&gt; longest = words.stream()
+          .reduce((w1, w2) -&gt; w1.length() &gt; w2.length() ? w1 : w2);
+        </div>
+      </div>
+
+      <div class="feature-card">
+        <h4>forEach() / count() / anyMatch()</h4>
+        <div class="code-block">
+          // Iterate through elements
+          stream.forEach(System.out::println);
+
+          // Count elements
+          long count = stream.count();
+
+          // Check conditions
+          boolean hasLongWord = words.stream()
+          .anyMatch(s -&gt; s.length() &gt; 5);
+
+          boolean allStartWithJ = words.stream()
+          .allMatch(s -&gt; s.startsWith("J"));
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="collection-streams">
+    <h2>Collection Streams (CollectionStreams.java)</h2>
+    <p>Advanced operations when working with collections and complex data structures.</p>
+
+    <div class="feature-grid">
+      <div class="feature-card">
+        <h4>Complex Filtering & Mapping</h4>
+        <div class="code-block">
+          class Person {
+          String name;
+          int age;
+          String city;
+          // constructors, getters...
+          }
+
+          List&lt;Person&gt; people = Arrays.asList(
+          new Person("Alice", 25, "NYC"),
+          new Person("Bob", 30, "LA"),
+          new Person("Charlie", 35, "NYC")
+          );
+
+          // Complex filtering and transformation
+          List&lt;String&gt; nycAdults = people.stream()
+          .filter(p -&gt; p.getAge() &gt;= 25)
+          .filter(p -&gt; "NYC".equals(p.getCity()))
+          .map(Person::getName)
+          .sorted()
+          .collect(Collectors.toList());
+        </div>
+      </div>
+
+      <div class="feature-card">
+        <h4>Grouping and Partitioning</h4>
+        <div class="code-block">
+          // Group by city
+          Map&lt;String, List&lt;Person&gt;&gt; peopleByCity = people.stream()
+          .collect(Collectors.groupingBy(Person::getCity));
+
+          // Partition by age
+          Map&lt;Boolean, List&lt;Person&gt;&gt; partitioned = people.stream()
+          .collect(Collectors.partitioningBy(p -&gt; p.getAge() &gt;= 30));
+
+          // Group and count
+          Map&lt;String, Long&gt; countByCity = people.stream()
+          .collect(Collectors.groupingBy(
+          Person::getCity,
+          Collectors.counting()
+          ));
+
+          // Group and calculate average
+          Map&lt;String, Double&gt; avgAgeByCity = people.stream()
+          .collect(Collectors.groupingBy(
+          Person::getCity,
+          Collectors.averagingInt(Person::getAge)
+          ));
+        </div>
+      </div>
+
+      <div class="feature-card">
+        <h4>Working with Nested Collections</h4>
+        <div class="code-block">
+          class Department {
+          String name;
+          List&lt;Person&gt; employees;
+          // constructors, getters...
+          }
+
+          List&lt;Department&gt; departments = Arrays.asList(
+          new Department("IT", Arrays.asList(/*...*/)),
+          new Department("HR", Arrays.asList(/*...*/))
+          );
+
+          // Get all employees from all departments
+          List&lt;Person&gt; allEmployees = departments.stream()
+          .flatMap(dept -&gt; dept.getEmployees().stream())
+          .collect(Collectors.toList());
+
+          // Find employees by criteria across departments
+          List&lt;Person&gt; seniorEmployees = departments.stream()
+          .flatMap(dept -&gt; dept.getEmployees().stream())
+          .filter(emp -&gt; emp.getAge() &gt; 30)
+          .sorted(Comparator.comparing(Person::getName))
+          .collect(Collectors.toList());
+        </div>
+      </div>
+
+      <div class="feature-card">
+        <h4>Statistical Operations</h4>
+        <div class="code-block">
+          // Numeric statistics
+          IntSummaryStatistics ageStats = people.stream()
+          .mapToInt(Person::getAge)
+          .summaryStatistics();
+
+          System.out.println("Average age: " + ageStats.getAverage());
+          System.out.println("Max age: " + ageStats.getMax());
+          System.out.println("Min age: " + ageStats.getMin());
+          System.out.println("Total count: " + ageStats.getCount());
+
+          // Custom statistics with collectors
+          DoubleSummaryStatistics stats = people.stream()
+          .collect(Collectors.summarizingDouble(Person::getAge));
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="parallel-streams">
+    <h2>Parallel Streams (ParallelStreams.java)</h2>
+    <p>Leveraging multi-core processors for improved performance with parallel processing.</p>
+
+    <div class="feature-grid">
+      <div class="feature-card">
+        <h4>Creating Parallel Streams</h4>
+        <div class="code-block">
+          // From sequential to parallel
+          List&lt;Integer&gt; numbers = Arrays.asList(1, 2, 3, 4, 5, 6, 7, 8, 9, 10);
+
+          // Method 1: Call parallelStream()
+          numbers.parallelStream()
+          .filter(n -&gt; n % 2 == 0)
+          .forEach(System.out::println);
+
+          // Method 2: Convert sequential to parallel
+          numbers.stream()
+          .parallel()
+          .map(n -&gt; n * n)
+          .collect(Collectors.toList());
+
+          // Check if stream is parallel
+          boolean isParallel = numbers.parallelStream().isParallel(); // true
+        </div>
+      </div>
+
+      <div class="feature-card">
+        <h4>Performance Comparison</h4>
+        <div class="code-block">
+          List&lt;Integer&gt; hugeList = IntStream.rangeClosed(1, 10_000_000)
+          .boxed()
+          .collect(Collectors.toList());
+
+          // Sequential processing
+          long start = System.currentTimeMillis();
+          long sequentialSum = hugeList.stream()
+          .mapToLong(i -&gt; i)
+          .sum();
+          long sequentialTime = System.currentTimeMillis() - start;
+
+          // Parallel processing
+          start = System.currentTimeMillis();
+          long parallelSum = hugeList.parallelStream()
+          .mapToLong(i -&gt; i)
+          .sum();
+          long parallelTime = System.currentTimeMillis() - start;
+
+          System.out.println("Sequential: " + sequentialTime + "ms");
+          System.out.println("Parallel: " + parallelTime + "ms");
+        </div>
+      </div>
+
+      <div class="feature-card">
+        <h4>Thread Safety Considerations</h4>
+        <div class="code-block">
+          // WRONG - Not thread safe
+          List&lt;Integer&gt; results = new ArrayList&lt;&gt;();
+          numbers.parallelStream()
+          .forEach(results::add); // Race condition!
+
+          // CORRECT - Use thread-safe collectors
+          List&lt;Integer&gt; safeResults = numbers.parallelStream()
+          .collect(Collectors.toList());
+
+          // CORRECT - Use thread-safe data structures
+          List&lt;Integer&gt; synchronizedList = Collections.synchronizedList(new ArrayList&lt;&gt;());
+          numbers.parallelStream()
+          .forEach(synchronizedList::add);
+
+          // CORRECT - Use concurrent collections
+          ConcurrentHashMap&lt;Integer, String&gt; map = new ConcurrentHashMap&lt;&gt;();
+          numbers.parallelStream()
+          .forEach(n -&gt; map.put(n, "Value" + n));
+        </div>
+      </div>
+
+      <div class="feature-card">
+        <h4>When to Use Parallel Streams</h4>
+        <div class="pros-cons">
+          <div class="pros">
+            <strong>Use Parallel When:</strong>
+            <ul>
+              <li>Large datasets (thousands+ elements)</li>
+              <li>CPU-intensive operations</li>
+              <li>Independent operations</li>
+              <li>Stateless operations</li>
+              <li>Multiple CPU cores available</li>
+            </ul>
+          </div>
+          <div class="cons">
+            <strong>Avoid Parallel When:</strong>
+            <ul>
+              <li>Small datasets (overhead > benefit)</li>
+              <li>I/O-bound operations</li>
+              <li>Order-dependent operations</li>
+              <li>Stateful operations</li>
+              <li>Thread safety concerns</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="performance-card">
+      <h4>📊 Parallel Stream Performance Tips</h4>
+      <ul>
+        <li><strong>Fork/Join Pool:</strong> Parallel streams use common ForkJoinPool with (CPU cores - 1) threads</li>
+        <li><strong>Splitting:</strong> ArrayList and arrays split better than linkedList or HashSet</li>
+        <li><strong>Boxing Overhead:</strong> Use primitive streams (IntStream, LongStream) when possible</li>
+        <li><strong>Measurement:</strong> Always benchmark to verify performance improvements</li>
+      </ul>
+    </div>
+  </section>
+
+  <section id="performance">
+    <h2>Performance Considerations</h2>
+
+    <table class="comparison-table">
+      <thead>
+      <tr>
+        <th>Aspect</th>
+        <th>Sequential Streams</th>
+        <th>Parallel Streams</th>
+        <th>Traditional Loops</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr>
+        <td>Best for</td>
+        <td>Small to medium datasets, Complex logic</td>
+        <td>Large datasets, CPU-intensive tasks</td>
+        <td>Simple operations, Performance critical</td>
+      </tr>
+      <tr>
+        <td>Memory Usage</td>
+        <td>Moderate (lazy evaluation)</td>
+        <td>Higher (thread overhead)</td>
+        <td>Low</td>
+      </tr>
+      <tr>
+        <td>Code Readability</td>
+        <td>High (declarative)</td>
+        <td>High (declarative)</td>
+        <td>Lower (imperative)</td>
+      </tr>
+      <tr>
+        <td>Debugging</td>
+        <td>Moderate complexity</td>
+        <td>Complex (multiple threads)</td>
+        <td>Easy</td>
+      </tr>
+      <tr>
+        <td>Thread Safety</td>
+        <td>Single-threaded</td>
+        <td>Requires careful consideration</td>
+        <td>Depends on implementation</td>
+      </tr>
+      </tbody>
+    </table>
+  </section>
+
+</div>
+</body>
+</html>
