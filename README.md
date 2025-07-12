@@ -18,7 +18,7 @@ JCF is a **core part of the Java Standard Library** (`java.util`) and was introd
 
 JCF defines a set of core interfaces, which are the **foundation of collections**:
 
-- `Collection<E>` – The root interface for all collections.
+- `Collection<E>` – The root interface for all collections. 
 - `List<E>` – An ordered collection (e.g., `ArrayList`, `LinkedList`).
 - `Set<E>` – A collection that does not allow duplicate elements (e.g., `HashSet`, `TreeSet`).
 - `SortedSet<E>` / `NavigableSet<E>` – Sorted set variants (e.g., `TreeSet`).
